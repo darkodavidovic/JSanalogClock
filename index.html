@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Self driven Analog Clock | JS and SCSS</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+            <li>12</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script>
+        function c(data) {
+            console.log(data);
+        }
+
+        // get clock from the machine
+        const askDate = new Date();
+
+        // clock pointers degrees caclulator
+        let hoursStep =   -90 + (askDate.getHours() *  30);
+        let minutesStep = -90 + (askDate.getMinutes() * 6);
+        let secondsStep = -90 + (askDate.getSeconds() * 6);
+
+        // DOM current time setup
+        const elements = document.body.childNodes;
+        elements[1].childNodes[1].childNodes[25].style.transform = "rotate(" + hoursStep + "deg)";
+        elements[1].childNodes[1].childNodes[27].style.transform = "rotate(" + minutesStep + "deg)";
+        elements[1].childNodes[1].childNodes[29].style.transform = "rotate(" + secondsStep + "deg)";
+
+        // seconds pointer engine
+        setInterval(() => {
+            elements[1].childNodes[1].childNodes[29].style.transform = "rotate(" + secondsStep + "deg)";
+            secondsStep = secondsStep + 6;
+            if (secondsStep == 276) {
+                secondsStep = -84;
+                minutesStep = minutesStep + 6;
+                elements[1].childNodes[1].childNodes[27].style.transform = "rotate(" + minutesStep + "deg)";
+                check();
+            }
+        }, 1000);
+
+        // prevent infinite degrees for hours and minutes
+        function check() {
+            if (minutesStep == 270) {
+                minutesStep = -84;
+                hoursStep = hoursStep + 30;
+                elements[1].childNodes[1].childNodes[25].style.transform = "rotate(" + hoursStep + "deg)";
+            }
+            if (hoursStep == 270 || hoursStep == 630) {
+                hoursStep = -90;
+            }
+        }
+    </script>
+</body>
+
+</html>
